@@ -9,6 +9,7 @@ to be able to see it.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import sys
@@ -106,19 +107,25 @@ def main() -> int:
     count = f"{len(repos)} site{'s' if len(repos) != 1 else ''}"
     stamp = datetime.now(timezone.utc).strftime("%d %B %Y")
 
+    css = (ROOT / "static" / "style.css").read_text(encoding="utf-8")
+    # GitHub Pages serves assets with max-age=600, so without a content hash in
+    # the URL a style change is invisible to anyone who loaded the page in the
+    # last ten minutes.
+    css_hash = hashlib.sha256(css.encode("utf-8")).hexdigest()[:12]
+
     html = (ROOT / "templates" / "index.html").read_text(encoding="utf-8")
     for key, value in {
         "{{USER}}": escape(USER),
         "{{CARDS}}": cards,
         "{{COUNT}}": count,
         "{{UPDATED}}": stamp,
+        "{{CSSHASH}}": css_hash,
     }.items():
         html = html.replace(key, value)
 
     OUT.mkdir(exist_ok=True)
     (OUT / "index.html").write_text(html, encoding="utf-8")
-    (OUT / "style.css").write_text(
-        (ROOT / "static" / "style.css").read_text(encoding="utf-8"), encoding="utf-8")
+    (OUT / "style.css").write_text(css, encoding="utf-8")
     # Without this, Pages runs the output through Jekyll and drops _-prefixed paths.
     (OUT / ".nojekyll").write_text("", encoding="utf-8")
 
