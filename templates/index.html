@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{USER}}</title>
+<meta name="description" content="Live GitHub Pages sites by {{USER}}.">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='13'>&#9679;</text></svg>">
+</head>
+<body>
+<main>
+  <header class="head">
+    <h1>{{USER}}</h1>
+    <p class="sub">Things I have built and put online. {{COUNT}} currently live.</p>
+  </header>
+
+  <ul class="grid">
+{{CARDS}}
+  </ul>
+
+  <footer class="foot">
+    <p>Generated {{UPDATED}} · <a href="https://github.com/{{USER}}">github.com/{{USER}}</a></p>
+  </footer>
+</main>
+</body>
+</html>
